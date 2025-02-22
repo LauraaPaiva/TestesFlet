@@ -9,7 +9,16 @@ def main(page: ft.Page):
     def RenderizarListaDeProdutos():
         lista_produtos.controls.clear()
         for p in ListarProdutos():
-            lista_produtos.controls.append(ft.Text(p.nome))
+            lista_produtos.controls.append(
+                ft.Container(
+                    ft.Text(p.nome),
+                    alignment=ft.alignment.center,
+                    bgcolor=ft.colors.BLACK,
+                    padding= 10,
+                    margin=5,
+                    border_radius=10
+                )
+            )
         lista_produtos.update()
 
     def Cadastrar(e):

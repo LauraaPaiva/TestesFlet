@@ -1,21 +1,44 @@
 import flet as ft
-from models import Cadastro, Produto
+from models import Cadastro, Produto, ListarProdutos
 
 def main(page: ft.Page):
 
-    def cadastrar(e):
+    retorno_cadastro = ft.Text()
+    lista_produtos = ft.ListView(expand=True)
+
+    def RenderizarListaDeProdutos():
+        lista_produtos.controls.clear()
+        for p in ListarProdutos():
+            lista_produtos.controls.append(ft.Text(p.nome))
+        lista_produtos.update()
+
+    def Cadastrar(e):
         try:
-            novo_produto = Produto(nome=nome.value, preco=preco.value)
+            novo_produto = Produto(nome=nome.value, preco=float(preco.value))
             Cadastro(novo_produto)
-            print(f'{nome.value} cadastrado com sucesso!')
+            retorno_cadastro.value = f'{nome.value} cadastrado com sucesso!'
+            RenderizarListaDeProdutos()
         except Exception as e:
-            print(f'Erro ao cadastrar: {str(e)}')
+            retorno_cadastro.value = f'Erro ao cadastrar: {str(e)}'
+        page.update()
 
     page.title = 'Gerenciamento de Produtos'
-    titulo = ft.Text('Cadastro de produto')
+    titulo_produtos = ft.Text('Produtos')
+    titulo_cadastro = ft.Text('Cadastro de produto')
     nome = ft.TextField(label='Nome', text_align=ft.TextAlign.LEFT)
     preco = ft.TextField(label='Preço', text_align=ft.TextAlign.LEFT)
-    btn_cadastro = ft.ElevatedButton('Cadastrar', on_click=cadastrar)
-    page.add(titulo, nome, preco, btn_cadastro)
+    btn_cadastro = ft.ElevatedButton('Cadastrar', on_click=Cadastrar)
 
+    page.add(
+        titulo_produtos,
+        lista_produtos,
+        titulo_cadastro,
+        nome,
+        preco,
+        btn_cadastro,
+        retorno_cadastro
+    )
+
+    RenderizarListaDeProdutos()
+    
 ft.app(target=main)

@@ -15,6 +15,12 @@ def Cadastro(item):
     session.commit()
     session.close()
 
+def ListarProdutos():
+    session = SessionFactory()
+    produtos = session.query(Produto).all()
+    session.close()
+    return produtos
+
 class Produto(Base):
     __tablename__ = 'Produto'
     id = Column(Integer, primary_key=True)
